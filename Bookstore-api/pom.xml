@@ -142,6 +142,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.19.8</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<!--<version>5.5.0</version>-->
@@ -160,29 +166,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<configuration>
-					<url>jdbc:mysql://localhost:3306/rest_with_spring_boot_erudio?useTimezone=true&amp;serverTimezone=UTC</url>
-					<user>root</user>
-					<password>admin123</password>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>com.mysql</groupId>
-						<artifactId>mysql-connector-j</artifactId>
-						<version>9.1.0</version>
-						<exclusions>
-							<exclusion>
-								<groupId>org.slf4j</groupId>
-								<artifactId>slf4j-api</artifactId>
-							</exclusion>
-						</exclusions>
-
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

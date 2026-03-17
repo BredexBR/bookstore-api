@@ -3,19 +3,15 @@ package br.com.erudio.repository;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.erudio.model.Person;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -23,46 +19,63 @@ class PersonRepositoryTest extends AbstractIntegrationTest {
 
     @Autowired
     PersonRepository repository;
+
     private static Person person;
 
     @BeforeAll
     static void setUp() {
+        // Cria um objeto Person preenchendo todos os campos obrigatórios
         person = new Person();
+        person.setFirstName("Nikola");
+        person.setLastName("Tesla");
+        person.setGender("Male");
+        person.setEnabled(true);
+        person.setAddress("123 Main Street"); // ⚠ obrigatório
+        // Campos opcionais podem ficar nulos
+        person.setPhotoUrl(null);
+        person.setProfileUrl(null);
     }
 
     @Test
     @Order(1)
     void findPeopleByName() {
+        // Salva a pessoa no banco
+        repository.save(person);
+
         Pageable pageable = PageRequest.of(
-            0,
-            12,
-            Sort.by(Sort.Direction.ASC, "firstName"));
+                0,
+                12,
+                Sort.by(Sort.Direction.ASC, "firstName"));
 
-        person = repository.findPeopleByName("iko", pageable).getContent().get(0);
+        // Busca por nome
+        var result = repository.findPeopleByName("iko", pageable);
+        Person found = result.getContent().get(0);
 
-        assertNotNull(person);
-        assertNotNull(person.getId());
-        assertEquals("Nikola", person.getFirstName());
-        assertEquals("Tesla", person.getLastName());
-        assertEquals("Male", person.getGender());
-        assertTrue(person.getEnabled());
+        assertNotNull(found);
+        assertNotNull(found.getId());
+        assertEquals("Nikola", found.getFirstName());
+        assertEquals("Tesla", found.getLastName());
+        assertEquals("Male", found.getGender());
+        assertTrue(found.getEnabled());
     }
 
     @Test
     @Order(2)
     void disablePerson() {
+        // garante que a pessoa existe no banco
+        Person savedPerson = repository.save(person);
 
-        Long id = person.getId();
-        repository.disablePerson(id);
+        // desabilita
+        repository.disablePerson(savedPerson.getId());
 
-        var result = repository.findById(id);
-        person = result.get();
+        // busca novamente
+        Person updated = repository.findById(savedPerson.getId())
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada após desabilitar"));
 
-        assertNotNull(person);
-        assertNotNull(person.getId());
-        assertEquals("Nikola", person.getFirstName());
-        assertEquals("Tesla", person.getLastName());
-        assertEquals("Male", person.getGender());
-        assertFalse(person.getEnabled());
+        assertNotNull(updated);
+        assertEquals("Nikola", updated.getFirstName());
+        assertEquals("Tesla", updated.getLastName());
+        assertEquals("Male", updated.getGender());
+        assertFalse(updated.getEnabled());
     }
 }

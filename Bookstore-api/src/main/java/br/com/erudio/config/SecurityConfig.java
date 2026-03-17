@@ -72,7 +72,7 @@ public class SecurityConfig {
                         "/auth/createUser", //Não pode ficar disponível em PRODUÇÃO!!!!
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
-                    ).permitAll() // Precisa estar autenticado!
+                    ).permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/users").denyAll()
                 )

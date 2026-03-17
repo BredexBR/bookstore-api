@@ -6,7 +6,7 @@ cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 spring:
   application:
-    name: javaSpringBootErudio2025
+    name: Bookstore-api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:

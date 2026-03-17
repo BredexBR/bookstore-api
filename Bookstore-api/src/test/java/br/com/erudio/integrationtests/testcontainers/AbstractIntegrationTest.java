@@ -1,42 +1,30 @@
 package br.com.erudio.integrationtests.testcontainers;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.lifecycle.Startables;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.Map;
-import java.util.stream.Stream;
+@Testcontainers
+public abstract class AbstractIntegrationTest {
 
-@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
-public class AbstractIntegrationTest {
+    @Container
+    static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0.41")
+            .withDatabaseName("testdb")
+            .withUsername("test")
+            .withPassword("test")
+            .withExposedPorts(3306) // garante que a porta 3306 do container está exposta
+            .waitingFor(Wait.forListeningPort()); // espera até que a porta TCP esteja pronta
 
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.1.0");
-
-        private static void startContainers() {
-            Startables.deepStart(Stream.of(mysql)).join();
-        }
-
-        private static Map<String, String> createConnectionConfiguration() {
-            return Map.of(
-                    "spring.datasource.url", mysql.getJdbcUrl(),
-                    "spring.datasource.username", mysql.getUsername(),
-                    "spring.datasource.password", mysql.getPassword()
-            );
-        }
-
-        @Override
-        public void initialize(ConfigurableApplicationContext applicationContext) {
-            startContainers();
-            ConfigurableEnvironment environment = applicationContext.getEnvironment();
-            MapPropertySource testcontainers = new MapPropertySource("testcontainers",
-                    (Map) createConnectionConfiguration());
-            environment.getPropertySources().addFirst(testcontainers);
-        }
+    // Define as propriedades do Spring Boot dinamicamente
+    @DynamicPropertySource
+    static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", () -> mysqlContainer.getJdbcUrl());
+        registry.add("spring.datasource.username", () -> mysqlContainer.getUsername());
+        registry.add("spring.datasource.password", () -> mysqlContainer.getPassword());
+        registry.add("spring.datasource.driver-class-name", () -> mysqlContainer.getDriverClassName());
+        registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
     }
 }
