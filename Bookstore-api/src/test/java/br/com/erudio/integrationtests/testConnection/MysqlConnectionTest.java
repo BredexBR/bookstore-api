@@ -1,4 +1,4 @@
-package br.com.erudio.integrationtests.testConnectionMySQL;
+package br.com.erudio.integrationtests.testConnection;
 
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
