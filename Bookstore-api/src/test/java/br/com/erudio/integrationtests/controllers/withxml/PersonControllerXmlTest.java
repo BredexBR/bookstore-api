@@ -18,6 +18,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
 import java.util.List;
@@ -29,10 +30,12 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonControllerXmlTest extends AbstractIntegrationTest {
 
+    @LocalServerPort
+    private int randomPort;
     private static RequestSpecification specification;
     private static XmlMapper objectMapper;
 
@@ -52,11 +55,11 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     @Order(0)
     void signin() throws JsonProcessingException {
         AccountCredentialsDTO credentials =
-                new AccountCredentialsDTO("leandro", "admin123");
+                new AccountCredentialsDTO("teste", "admin123");
 
         var content = given()
                 .basePath("/auth/signin")
-                .port(TestConfigs.SERVER_PORT)
+                .port(randomPort)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
                 .accept(MediaType.APPLICATION_XML_VALUE)
                 .body(credentials)
@@ -74,7 +77,7 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
                 .setBasePath("/api/person/v1")
-                .setPort(TestConfigs.SERVER_PORT)
+                .setPort(randomPort)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();

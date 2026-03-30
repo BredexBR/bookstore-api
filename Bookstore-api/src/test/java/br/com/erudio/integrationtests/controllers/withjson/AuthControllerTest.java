@@ -7,6 +7,7 @@ import br.com.erudio.integrationtests.dto.TokenDTO;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -15,10 +16,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = {Startup.class, AuthControllerTest.TestConfig.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthControllerTest extends AbstractIntegrationTest {
+
+    @LocalServerPort
+    private int randomPort;
 
     private static TokenDTO tokenDto;
 
@@ -31,11 +35,11 @@ class AuthControllerTest extends AbstractIntegrationTest {
     @Order(1)
     void signin() {
         AccountCredentialsDTO credentials =
-            new AccountCredentialsDTO("leandro", "admin123");
+            new AccountCredentialsDTO("teste", "admin123");
 
         tokenDto = given()
                 .basePath("/auth/signin")
-                    .port(TestConfigs.SERVER_PORT)
+                    .port(randomPort)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(credentials)
                     .when()
@@ -55,7 +59,7 @@ class AuthControllerTest extends AbstractIntegrationTest {
     void refreshToken() {
         tokenDto = given()
                 .basePath("/auth/refresh")
-                .port(TestConfigs.SERVER_PORT)
+                .port(randomPort)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .pathParam("username", tokenDto.getUsername())
                 .header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getRefreshToken())

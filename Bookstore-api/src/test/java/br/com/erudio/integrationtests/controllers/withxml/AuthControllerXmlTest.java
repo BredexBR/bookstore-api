@@ -10,14 +10,18 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthControllerXmlTest extends AbstractIntegrationTest {
+
+    @LocalServerPort
+    private int randomPort;
 
     private static TokenDTO tokenDto;
     private static XmlMapper objectMapper;
@@ -34,11 +38,11 @@ class AuthControllerXmlTest extends AbstractIntegrationTest {
     @Order(1)
     void signin() throws JsonProcessingException {
         AccountCredentialsDTO credentials =
-            new AccountCredentialsDTO("leandro", "admin123");
+            new AccountCredentialsDTO("teste", "admin123");
 
         var content = given()
                 .basePath("/auth/signin")
-                    .port(TestConfigs.SERVER_PORT)
+                    .port(randomPort)
                     .contentType(MediaType.APPLICATION_XML_VALUE)
                     .accept(MediaType.APPLICATION_XML_VALUE)
                 .body(credentials)
@@ -61,7 +65,7 @@ class AuthControllerXmlTest extends AbstractIntegrationTest {
     void refreshToken() throws JsonProcessingException {
         var content = given()
                 .basePath("/auth/refresh")
-                .port(TestConfigs.SERVER_PORT)
+                .port(randomPort)
                 .contentType(MediaType.APPLICATION_XML_VALUE)
                 .accept(MediaType.APPLICATION_XML_VALUE)
                     .pathParam("username", tokenDto.getUsername())

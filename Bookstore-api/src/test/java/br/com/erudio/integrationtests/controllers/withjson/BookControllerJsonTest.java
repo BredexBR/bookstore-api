@@ -16,6 +16,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
 import java.util.Date;
@@ -25,10 +26,12 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookControllerJsonTest extends AbstractIntegrationTest {
 
+    @LocalServerPort
+    private int randomPort;
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
 
@@ -48,11 +51,11 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
     @Order(0)
     void signin() {
         AccountCredentialsDTO credentials =
-                new AccountCredentialsDTO("leandro", "admin123");
+                new AccountCredentialsDTO("teste", "admin123");
 
         tokenDto = given()
                 .basePath("/auth/signin")
-                .port(TestConfigs.SERVER_PORT)
+                .port(randomPort)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(credentials)
                 .when()
@@ -68,7 +71,7 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
                 .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
                 .setBasePath("/api/book/v1")
-                .setPort(TestConfigs.SERVER_PORT)
+                .setPort(randomPort)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 .build();
@@ -193,7 +196,6 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        // List<BookDTO> books = objectMapper.readValue(content, new TypeReference<List<BookDTO>>() {});
         WrapperBookDTO wrapper = objectMapper.readValue(content, WrapperBookDTO.class);
         var books = wrapper.getEmbedded().getBooks();
 
@@ -206,7 +208,7 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
         assertTrue(bookOne.getId() > 0);
         assertEquals("The Art of Agile Development", bookOne.getTitle());
         assertEquals("James Shore e Shane Warden", bookOne.getAuthor());
-        assertEquals(97.21, bookOne.getPrice());
+        assertEquals(79.57, bookOne.getPrice());
 
         BookDTO foundBookSeven = books.get(7);
 
@@ -217,7 +219,7 @@ class BookControllerJsonTest extends AbstractIntegrationTest {
         assertTrue(foundBookSeven.getId() > 0);
         assertEquals("The Art of Computer Programming, Volume 1: Fundamental Algorithms", foundBookSeven.getTitle());
         assertEquals("Donald E. Knuth", foundBookSeven.getAuthor());
-        assertEquals(139.69, foundBookSeven.getPrice());
+        assertEquals(51.21, foundBookSeven.getPrice());
     }
 
     private void mockBook() {

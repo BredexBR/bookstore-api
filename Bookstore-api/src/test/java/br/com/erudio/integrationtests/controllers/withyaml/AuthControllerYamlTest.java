@@ -13,15 +13,19 @@ import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthControllerYamlTest extends AbstractIntegrationTest {
 
+    @LocalServerPort
+    private int randomPort;
+    
     private static TokenDTO tokenDto;
     private static YAMLMapper objectMapper;
 
@@ -36,7 +40,7 @@ class AuthControllerYamlTest extends AbstractIntegrationTest {
     @Order(1)
     void signin() throws JsonProcessingException {
         AccountCredentialsDTO credentials =
-            new AccountCredentialsDTO("leandro", "admin123");
+            new AccountCredentialsDTO("teste", "admin123");
 
         tokenDto = given()
                 .config(
@@ -46,7 +50,7 @@ class AuthControllerYamlTest extends AbstractIntegrationTest {
                                 encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
                 )
                 .basePath("/auth/signin")
-                    .port(TestConfigs.SERVER_PORT)
+                    .port(randomPort)
                     .contentType(MediaType.APPLICATION_YAML_VALUE)
                     .accept(MediaType.APPLICATION_YAML_VALUE)
                 .body(credentials, objectMapper)
@@ -72,7 +76,7 @@ class AuthControllerYamlTest extends AbstractIntegrationTest {
                             encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT))
                 )
                 .basePath("/auth/refresh")
-                .port(TestConfigs.SERVER_PORT)
+                .port(randomPort)
                 .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .accept(MediaType.APPLICATION_YAML_VALUE)
                     .pathParam("username", tokenDto.getUsername())

@@ -20,10 +20,17 @@ class PersonRepositoryTest extends AbstractIntegrationTest {
     @Autowired
     PersonRepository repository;
 
-    private static Person person;
+    private Person person;
 
-    @BeforeAll
-    static void setUp() {
+
+    /*Jogar na IA:
+    *
+    * Method 'setUp' annotated with '@BeforeEach' should be non-static
+    * Non-static field 'person' cannot be referenced from a static context
+    * */
+
+    @BeforeEach
+    void setUp() {
         // Cria um objeto Person preenchendo todos os campos obrigatórios
         person = new Person();
         person.setFirstName("Nikola");
