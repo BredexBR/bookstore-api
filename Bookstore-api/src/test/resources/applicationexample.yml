@@ -1,7 +1,7 @@
 server:
   port: 8888
 file:
-  upload-dir: /UploadDir
+  upload-dir: /home/runner/work/NOME_DO_REPOSITORIO/UploadDir
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 spring:
