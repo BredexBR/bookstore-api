@@ -18,8 +18,23 @@ jobs:
        username: ${{ secrets.DOCKER_USERNAME }}
        password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
+    - name: Setup Java 21
     - uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'temurin' # See 'Supported distributions' for available options
         cache: maven
+
+    - name: Build Application .jar
+      working-directory: ./Bookstore-api
+      run: mvn clean package
+
+    - name: Docker Compose Build
+      working-directory: ./
+      run: docker compose build
+
+    - name: Push to Docker Hub Container Registry
+      run: |
+        docker tag ${{ secrets.DOCKER_USERNAME }}/bookstore-api:latest ${{ secrets.DOCKER_USERNAME }}/bookstore-api:${{ github.run_id }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/bookstore-api:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/bookstore-api:${{ github.run_id }}
