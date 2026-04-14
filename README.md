@@ -1,6 +1,8 @@
 # 📚 Bookstore API
 
-RESTful API para gerenciamento de uma livraria, desenvolvida com Spring Boot.  
+[![Continuous Integration and Delivery with Github Actions](https://github.com/BredexBR/bookstore-api/actions/workflows/continuous-deployment.yml/badge.svg?branch=main)](https://github.com/BredexBR/bookstore-api/actions/workflows/continuous-deployment.yml)
+
+RESTful API para gerenciamento de uma livraria, desenvolvida com Spring Boot.
 O projeto implementa boas práticas de desenvolvimento backend seguindo os princípios do **Glory of REST**, incluindo versionamento de API, testes automatizados e documentação com Swagger.
 
 A API permite o gerenciamento completo de livros, incluindo operações de criação, consulta, atualização e remoção.
