@@ -12,9 +12,9 @@ spring:
     name: Bookstore-api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/NomeDoBancoDeDados?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/${MYSQL_DATABASE_BOOKSTORE}?useTimezone=true&serverTimezone=UTC
     username: root
-    password: suaSenha
+    password: ${SENHA_BD_BOOKSTORE}
   jpa:
     hibernate:
       ddl-auto: none
@@ -25,7 +25,7 @@ spring:
   security:
     jwt:
       token:
-        secret-key: ColoqueASecretKeyDesejada
+        secret-key: ${JWT_TOKEN_SECRET_KEY_BOOKSTORE}
         expire-lenght: 3600000
   mail:
     host: smtp.gmail.com

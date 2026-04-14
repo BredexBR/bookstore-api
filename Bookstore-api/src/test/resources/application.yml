@@ -1,7 +1,7 @@
 server:
   port: 8888
 file:
-  upload-dir: /home/runner/work/NOME_DO_REPOSITORIO/UploadDir
+  upload-dir: /home/runner/work/bookstore-api/UploadDir
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://www.erudio.com.br
 spring:
@@ -9,6 +9,10 @@ spring:
     name: Bookstore-api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-test-query: SELECT 1
+      max-lifetime: 600000 # 10 minutos (Evita que o Hikari segure conexões mortas)
+      maximum-pool-size: 5 # Reduz o pool para testes para não sobrecarregar o container
   jpa:
     hibernate:
       ddl-auto: none
@@ -19,17 +23,25 @@ spring:
   security:
     jwt:
       token:
-        secret-key: ColoqueASecretKeyDesejada
+        secret-key: ${JWT_TOKEN_SECRET_KEY_BOOKSTORE}
         expire-lenght: 3600000
-  email:
-    subject: "Default Subject"
-    message: "Default Message"
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: ${EMAIL_USERNAME}
+      password: ${EMAIL_PASSWORD}
+      properties:
+        mail.smtp.auth: true
+        mail.smtp.starttls.enabled: true
+        mail.smtp.starttls.required: true
   servlet:
     multipart:
       enabled: true
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215 MB
+  flyway:
+    enabled: true
 logging:
   level:
     root: INFO
