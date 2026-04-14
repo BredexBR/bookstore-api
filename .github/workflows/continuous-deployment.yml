@@ -35,6 +35,12 @@ jobs:
 
     - name: Docker Compose Build
       working-directory: ./
+      env:
+        SENHA_BD_BOOKSTORE: ${{ secrets.SENHA_BD_BOOKSTORE }}
+        MYSQL_USER_DOCKER_BOOKSTORE: ${{ secrets.MYSQL_USER_DOCKER_BOOKSTORE }}
+        MYSQL_PASSWORD_DOCKER_BOOKSTORE: ${{ secrets.MYSQL_PASSWORD_DOCKER_BOOKSTORE }}
+        MYSQL_DATABASE_BOOKSTORE: ${{ secrets.MYSQL_DATABASE_BOOKSTORE }}
+        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
       run: docker compose build
 
     - name: Push to Docker Hub Container Registry
