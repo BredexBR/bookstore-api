@@ -18,13 +18,19 @@ A API permite o gerenciamento completo de livros, incluindo operações de cria�
 - [Migrações com Flyway](#migrações-com-flyway)
 - [Content Negotiation](#content-negotiation)
 - [HATEOAS](#hateoas)
-- [Testes unitários com Mockito e JUnit 5](#testes-unitários-com-mockito-e-junit-5)
+- [Testes unitários](#testes-unitários)
 - [Testes de Integração](#testes-de-integração)
 - [Documentação com Swagger (SpringDoc OpenAPI)](#documentação-com-swagger-springdoc-openapi)
 - [CORS](#cors)
 - [Query Params e Busca Paginada](#query-params-e-busca-paginada)
 - [Upload e Download de Arquivos](#upload-e-download-de-arquivos)
 - [Importação e Exportação de Planilhas Excel e CSV](#importação-e-exportação-de-planilhas-excel-e-csv)
+- [Jaspersoft Ireport](#jaspersoft-ireport)
+- [Spring Mail](#spring-mail)
+- [JWT e Spring Security](#jwt-e-spring-security)
+- [Docker](#docker)
+- [CI/CD com GitHub Actions](#cicd-com-github-actions)
+- [React]
 - [O que é um Mock?](#o-que-é-um-mock)
 - [Spring Boot Initializr](#spring-boot-initializr)
 - [Geração de Mocks com Mockaroo](#geração-de-mocks-com-mockaroo)
@@ -204,7 +210,7 @@ As principais operações da API (Create, FindById, FindAll, Update e Delete) s�
 - Maior confiança em deploys e integrações contínuas
 
 Os testes estão localizados no diretório:  
-`src/test/java/br/com/erudio/services/PersonServicesTest`
+`Bookstore-api\src\test\java\br\com\erudio`
 
 > 📌 À medida que novas funcionalidades forem implementadas, novos testes unitários serão adicionados para cobrir os cenários correspondentes.
 
@@ -406,6 +412,232 @@ dados para outros sistemas.
 - Possibilita backup dos dados da aplicação
 - Simples de consumir usando Postman, Insomnia ou frontends como React
   e Angular
+
+## Jaspersoft Ireport
+
+O projeto também implementa a geração de **relatórios profissionais em PDF**, permitindo visualizar de forma organizada os livros cadastrados por um usuário.
+
+### 📄 Geração de Relatório em PDF
+
+A API consulta os dados diretamente no banco de dados e gera automaticamente um relatório estruturado contendo as informações dos livros.
+
+Esse processo é realizado utilizando:
+
+- **JasperReports (Jaspersoft iReport)** para criação e formatação do relatório
+- Templates `.jrxml` para definição do layout do documento
+
+### 🔎 O que o relatório contém:
+
+- Dados dos livros cadastrados
+- Informações organizadas em formato tabular
+- Layout profissional pronto para impressão ou compartilhamento
+
+### ⚙️ Como funciona:
+
+1. O cliente realiza uma requisição para o endpoint de relatório
+2. A API consulta os dados no banco (MySQL)
+3. Os dados são enviados para o template do JasperReports
+4. O PDF é gerado dinamicamente
+5. O arquivo é retornado para download
+
+### 📥 Exemplo visual do relatório:
+
+<br>
+
+![Ireport](imgs/23_Ireport.png)
+
+![Ireport Image](imgs/23_Ireport_image.png)
+
+### 🚀 Vantagens
+
+- Geração automática de documentos profissionais
+- Facilidade para exportar e compartilhar dados
+- Ideal para relatórios gerenciais
+- Integração simples com o backend existente
+
+> 📌 Essa funcionalidade é especialmente útil para fornecer uma visão consolidada dos dados de forma elegante e pronta para uso em ambientes corporativos.
+
+## Spring Mail
+
+A funcionalidade de e-mail foi desenvolvida como um componente desacoplado, permitindo reutilização em diferentes partes do sistema.
+
+### ⚙️ Funcionalidades implementadas:
+
+- Configuração SMTP externa via `application.yml`
+- Suporte ao envio de e-mails com anexos
+- Uso do **Builder Pattern** para facilitar a construção das mensagens
+
+## 📥 Exemplo visual:
+
+<br>
+
+![24_Postman.png](imgs/24_Postman.png)
+
+![24_Email](imgs/24_Email.png)
+
+![25_SpringSecurity](imgs/25_SpringSecurity.png)
+
+
+### 🧩 Arquitetura e boas práticas
+
+A implementação foi pensada para seguir princípios de boas práticas de desenvolvimento:
+
+- Separação de responsabilidades
+- Baixo acoplamento entre componentes
+- Facilidade de manutenção e extensão
+- Código limpo e organizado
+
+💡 A ideia foi transformar o envio de e-mails em um módulo reutilizável dentro da aplicação, evitando duplicação de lógica e facilitando futuras evoluções.
+
+### 🔁 Casos de uso
+
+Esse componente pode ser reutilizado em diversas funcionalidades, como:
+
+- Notificações do sistema
+- Confirmação de cadastro
+- Recuperação de senha
+- Envio de documentos
+
+### 🚀 Vantagens
+
+- Reutilização de código em múltiplos contextos
+- Facilidade de configuração e adaptação
+- Suporte a diferentes tipos de envio (simples e com anexos)
+- Melhor organização da camada de serviços
+
+> 📌 Essa abordagem torna o sistema mais escalável e preparado para crescer, mantendo a consistência na forma como os e-mails são enviados.
+
+## JWT e Spring Security
+
+O projeto implementa uma camada essencial de **segurança** utilizando **JWT (JSON Web Token)** em conjunto com o **Spring Security**, garantindo proteção dos endpoints da API.
+
+Agora, operações como:
+
+- Criar pessoa
+- Encontrar pessoa por ID
+- Listar todas as pessoas cadastradas
+- Criar livro
+
+exigem autenticação válida via token JWT.
+
+### 🔐 Como funciona?
+
+O fluxo de autenticação foi projetado seguindo boas práticas de APIs RESTful:
+
+1. O usuário realiza login informando suas credenciais
+2. A API gera um **access token (JWT)** com validade de **1 hora**
+3. Também é fornecido um **refresh token**, com validade de **3 horas**
+4. Quando o token expira, é possível gerar um novo access token utilizando o refresh token
+5. Todas as requisições protegidas exigem o envio do token no header `Authorization`
+
+## 📥 Exemplo visual:
+<br>
+
+![25_SpringSecurity](imgs/25_SpringSecurity.png)
+
+### 🧩 Características da implementação
+
+- Autenticação baseada em token (stateless)
+- Proteção de endpoints sensíveis
+- Separação clara entre autenticação e regras de negócio
+- Estrutura preparada para escalabilidade
+
+### 🚀 Por que isso é importante?
+
+A implementação de JWT com Spring Security traz diversos benefícios:
+
+- APIs **stateless** (sem necessidade de sessão no servidor)
+- Maior segurança nas requisições
+- Controle refinado de acesso aos recursos
+- Redução de vulnerabilidades comuns
+- Base sólida para aplicações reais em produção
+
+> 📌 Essa abordagem é amplamente utilizada no mercado e representa um passo importante na construção de APIs seguras, escaláveis e prontas para ambientes produtivos.
+
+## Docker
+
+O projeto foi containerizado utilizando **Docker**, permitindo que a aplicação e seus serviços sejam executados de forma padronizada e independente do ambiente local.
+
+### ⚙️ Orquestração com Docker Compose
+
+O ambiente da aplicação é composto por múltiplos serviços que trabalham em conjunto, incluindo:
+
+- Banco de dados MySQL
+- API Bookstore
+- Portainer (interface de gerenciamento de containers)
+
+### 🧩 Como funciona
+
+- O **MySQL** é executado em um container isolado
+- A **API** se conecta ao banco de dados através de uma rede interna
+- Os serviços se comunicam de forma segura dentro de uma network dedicada
+- O **Portainer** permite gerenciar os containers via interface web
+- Variáveis sensíveis são configuradas externamente (ex: `.env`)
+
+### 🚀 Vantagens
+
+- Ambiente totalmente isolado e padronizado
+- Facilidade para subir o projeto com um único comando (`docker-compose up`)
+- Elimina problemas de configuração local
+- Pronto para deploy em qualquer ambiente
+- Escalabilidade facilitada
+- Melhor organização dos serviços da aplicação
+
+### 📌 Observações
+
+- A aplicação está preparada para rodar em containers de forma independente
+- As configurações permitem fácil integração com serviços externos
+- O uso de Docker facilita testes, integração contínua e deploy
+
+> 💡 O uso do Docker torna o projeto mais profissional, garantindo consistência entre ambientes de desenvolvimento, teste e produção.
+
+## CI/CD com GitHub Actions
+
+**CI/CD (Integração Contínua e Entrega Contínua)** com **GitHub Actions**, automatizando o processo de build, criação de imagens Docker e publicação no Docker Hub.
+
+### 🔄 Integração Contínua (CI)
+
+Sempre que há um `push` na branch `main`, o pipeline é executado automaticamente, realizando:
+
+- Checkout do código-fonte
+- Configuração do ambiente com **Java 21**
+- Build da aplicação utilizando Maven
+- Empacotamento do projeto em um arquivo `.jar`
+
+### 🚀 Entrega Contínua (CD)
+
+Após o build da aplicação:
+
+- A imagem Docker da API é gerada automaticamente
+- A imagem é versionada utilizando o identificador do workflow (`run_id`)
+- A imagem é enviada para o **Docker Hub**
+
+### 🔐 Segurança
+
+- Credenciais sensíveis (como Docker Hub e banco de dados) são armazenadas utilizando **GitHub Secrets**
+- Nenhuma informação sensível é exposta no código
+
+## 📥 Exemplo visual:
+<br>
+
+![28_CICD](imgs/28_CICD.jpg)
+
+### 🧩 Benefícios da automação
+
+- Redução de erros manuais no processo de build e deploy
+- Entregas mais rápidas e consistentes
+- Facilidade para escalar o projeto
+- Integração com pipelines modernos de desenvolvimento
+
+### 📌 Fluxo resumido
+
+1. Desenvolvedor realiza um `push` na branch `main`
+2. O GitHub Actions inicia o pipeline automaticamente
+3. A aplicação é compilada e empacotada
+4. A imagem Docker é construída e versionada
+5. A imagem é publicada no Docker Hub
+
+> 💡 Essa abordagem garante um fluxo automatizado e confiável, aproximando o projeto de práticas utilizadas em ambientes profissionais e pipelines de produção.
 
 ## O que é um Mock?
 
