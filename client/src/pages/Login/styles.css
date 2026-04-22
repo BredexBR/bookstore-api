@@ -1,0 +1,96 @@
+.login-container {
+    width: 100%;
+    max-width: 1120px;
+    height: 100vh;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.login-container section.form {
+    width: 100%;
+    max-width: 400px;
+    margin-right: 30px;
+    
+    position: relative;
+    background: #1e1e21; 
+    padding: 60px 40px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    /* Esconde a sobra da luz, mas mantém o z-index organizado */
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* O rastro de luz suave */
+.login-container section.form::before {
+    content: '';
+    position: absolute;
+    /* Um círculo bem grande para garantir que a rotação seja uniforme */
+    width: 200%; 
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    
+    /* Gradiente com 'blur' para parecer fumaça/luz suave */
+    background: conic-gradient(
+        transparent, 
+        #00d4ff, 
+        #0055ff, 
+        transparent 30%
+    );
+    
+    animation: rotateBorder 6s linear infinite; /* 6s para ficar mais calmo */
+    z-index: -2;
+    filter: blur(15px) brightness(1.5);
+}
+
+/* O fundo interno que 'limpa' o centro do card */
+.login-container section.form::after {
+    content: '';
+    position: absolute;
+    inset: 2px; /* Espessura da borda */
+    /* background: #1e1e21;     Qual fica melhor???*/
+    background: #0d0d0f;
+    border-radius: 15px;
+    z-index: -1;
+}
+
+@keyframes rotateBorder {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.login-container section.form img {
+    width: 45%;
+    margin: 0 auto 40px auto; /* margem inferior para desgrudar do título */
+    display: block;
+    transform: scale(1.8); 
+    transition: transform 0.2s ease-in-out;
+}
+
+.login-container section.form form {
+    margin-top: 20px; /* margin-top de 100px para alinhar melhor no card */
+}
+
+.login-container section.form form h1 {
+    font-size: 32px;
+    margin-bottom: 32px;
+    color: #FFFFFF; /* Título em branco puro para destaque */
+    
+}
+
+.login-container > img {
+    max-width: 500px;
+    opacity: 0.9;
+
+    transform: scale(1.5);
+    transition: transform 0.2s ease-in-out;
+}
