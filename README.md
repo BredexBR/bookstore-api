@@ -475,9 +475,6 @@ A funcionalidade de e-mail foi desenvolvida como um componente desacoplado, perm
 
 ![24_Email](imgs/24_Email.png)
 
-![25_SpringSecurity](imgs/25_SpringSecurity.png)
-
-
 ### 🧩 Arquitetura e boas práticas
 
 A implementação foi pensada para seguir princípios de boas práticas de desenvolvimento:
