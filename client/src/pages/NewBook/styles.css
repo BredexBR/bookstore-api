@@ -1,25 +1,83 @@
+/* CONTAINER PRINCIPAL: Responsável por centralizar o card na tela */
 .new-book-container {
     width: 100%;
     max-width: 1120px;
-    height: 100vh;
+    height: 100vh; /* Ocupa a altura toda da tela */
     margin: 0 auto;
-
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
 }
 
+/* O CARD (Onde fica o formulário) */
 .new-book-container .content {
     width: 100%;
-    padding: 96px;
-    background: #F0F0F5;
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-
+    padding: 60px;
+    background: #1e1e21; 
+    border-radius: 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    
+    position: relative;
+    overflow: hidden; /* Esconde a sobra da luz */
+    z-index: 0;
+    border: 1px solid #2a2a2c;
+}
 
+/* ANIMAÇÃO NEON (Cyberpunk Cyan) */
+.new-book-container .content::before {
+    content: '';
+    position: absolute;
+    /* Usamos um quadrado gigante baseado na maior largura do card */
+    width: 150%; 
+    padding-bottom: 150%; 
+    
+    /* Gradiente ciano neon */
+    background: conic-gradient(
+        transparent, 
+        rgba(0, 212, 255, 0.4), 
+        #00d4ff, 
+        rgba(0, 212, 255, 0.4), 
+        transparent 30%
+    );
+
+    /* Centralização matemática perfeita do rastro de luz */
+    top: 50%;
+    left: 50%;
+    
+    /* O segredo: a animação agora gira a partir do centro exato */
+    animation: rotateNeon 6s linear infinite;
+    z-index: -2;
+    filter: blur(20px); /* Glow mais intenso */
+}
+
+/* FUNDO INTERNO (Limpa o meio do card) */
+.new-book-container .content::after {
+    content: '';
+    position: absolute;
+    inset: 3px; /* Espessura da "borda" de luz */
+    background: #1e1e21;
+    border-radius: 14px;
+    z-index: -1;
+}
+
+/* Keyframe atualizado para manter o centro fixo */
+@keyframes rotateNeon {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* ELEMENTOS INTERNOS (Z-INDEX 1 para ficarem acima da luz) */
+.new-book-container .content section,
+.new-book-container .content form {
+    position: relative;
+    z-index: 1;
 }
 
 .new-book-container .content section {
@@ -27,35 +85,61 @@
     max-width: 380px;
 }
 
-.new-book-container section.form{
-    width: 100%;
-    max-width: 350px;
-    margin-right: 30px;
+.new-book-container .content section img {
+    width: 180px;
+    margin-bottom: 40px;
+
+    transform: scale(1.5); 
+    transition: transform 0.2s ease-in-out;
 }
 
-.new-book-container section.form img {
-    width: 45%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-.new-book-container .content section h1{
-    margin: 64px 0 32px;
+.new-book-container .content section h1 {
+    margin: 32px 0 16px;
     font-size: 32px;
+    color: #fff;
 }
 
 .new-book-container .content section p {
     font-size: 18px;
-    color: #737380;
+    color: #C4C4CC;
     line-height: 32px;
 }
 
+.new-book-container .content section .back-link {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    color: #00d4ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* FORMULÁRIO E INPUTS */
 .new-book-container .content form {
     width: 100%;
     max-width: 450px;
 }
 
 .new-book-container .content form input {
+    background: #121214;
+    border: 1px solid #2a2a2c;
+    border-radius: 8px;
+    padding: 0 24px;
+    color: #fff;
     margin-top: 8px;
+}
+
+.new-book-container .content form input:focus {
+    border-color: #00d4ff;
+    outline: none;
+}
+
+.new-book-container .content form input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.new-book-container .content form .button {
+    margin-top: 16px;
+    background: #4139f2;
 }

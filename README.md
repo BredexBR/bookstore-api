@@ -30,7 +30,7 @@ A API permite o gerenciamento completo de livros, incluindo operações de cria�
 - [JWT e Spring Security](#jwt-e-spring-security)
 - [Docker](#docker)
 - [CI/CD com GitHub Actions](#cicd-com-github-actions)
-- [React]
+- [React](https://github.com/BredexBR/bookstore-api/blob/main/client)
 - [O que é um Mock?](#o-que-é-um-mock)
 - [Spring Boot Initializr](#spring-boot-initializr)
 - [Geração de Mocks com Mockaroo](#geração-de-mocks-com-mockaroo)

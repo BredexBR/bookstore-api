@@ -6,7 +6,7 @@ import api from '../../services/api';
 
 import './styles.css';
 
-import logoImage from '../../assets/logo.svg';
+import logoImage from '../../assets/LogotipoBSA.png';
 
 export default function NewBook() {
     const [id, setId] = useState(null);
@@ -90,7 +90,7 @@ export default function NewBook() {
                     <h1>{bookId === '0' ? 'Add New' : 'Update'} Book</h1>
                     <p>Enter the book information and click on {bookId === '0' ? "'Add'" : "'Update'"}!</p>
                     <Link className="back-link" to="/books">
-                        <FiArrowLeft size={16} color="#251fc5"/>
+                        <FiArrowLeft size={16} color="#00d4ff"/>
                         Back to Book
                     </Link>
                 </section>

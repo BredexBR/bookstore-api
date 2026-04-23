@@ -47,42 +47,34 @@ export default function Books() {
     }
 
     useEffect(() => {
-    async function loadBooks() {
-        // Busca o token dentro da função para garantir que não está pegando um valor "velho"
-        const token = localStorage.getItem('accessToken');
+    let isMounted = true; // Controle de montagem
 
-        if (!token) {
-            console.error("Nenhum token encontrado!");
-            navigate('/'); // Redireciona se não houver token
-            return;
-        }
+    async function loadBooks() {
+        const token = localStorage.getItem('accessToken');
+        if (!token) { navigate('/'); return; }
 
         try {
             const response = await api.get('api/book/v1', {
-                headers: {
-                    // Verifique se o espaço após 'Bearer' existe!
-                    Authorization: `Bearer ${token}`
-                },
-                params: {
-                    page: page,
-                    size: 4,
-                    direction: 'asc'
-                }
+                headers: { Authorization: `Bearer ${token}` },
+                params: { page: page, size: 4, direction: 'asc' }
             });
 
-            // Ajustado para 'book' conforme você descobriu
-            if (response.data && response.data._embedded) {
-                setBooks(prevBooks => [...prevBooks, ...response.data._embedded.books]);
+            if (isMounted && response.data?._embedded) {
+                const newBooks = response.data._embedded.books;
+                setBooks(prev => {
+                    const filtered = newBooks.filter(n => !prev.some(p => p.id === n.id));
+                    return [...prev, ...filtered];
+                });
             }
         } catch (error) {
-            console.error("Erro ao carregar livros", error);
-            // Se o erro for 403 (Forbidden), o token pode ter expirado
-            if(error.response?.status === 403) navigate('/');
+            if (isMounted) console.error("Erro ao carregar livros", error);
         }
     }
 
     loadBooks();
-}, [page, navigate]); // accessToken saiu das dependências pois agora pegamos ele dentro
+
+    return () => { isMounted = false; }; 
+}, [page, navigate]);
 
     // O botão "Load More" APENAS avança a página. 
     // Como a página mudou, o useEffect acima será acionado automaticamente!
