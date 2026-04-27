@@ -1,0 +1,4 @@
+kubectl get pods -o wide
+kubectl explain pods
+kubectl get pods
+kubectl describe pod hello-kubernetes-5df8fb76f9-25jkc 

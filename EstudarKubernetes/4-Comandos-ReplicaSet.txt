@@ -1,0 +1,17 @@
+kubectl get replicasets
+kubectl get rs
+
+kubectl get pods -o wide
+kubectl delete pod hello-kubernetes-5df8fb76f9-rxqs9
+kubectl get pods -o wide
+kubectl get rs
+ 
+kubectl scale deployment hello-kubernetes --replicas=3
+kubectl get pods
+kubectl get pods -o wide
+kubectl get replicaset
+kubectl get events
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl explain replicaset
+
+kubectl get replicasets -o wide

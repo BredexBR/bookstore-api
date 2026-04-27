@@ -1,0 +1,16 @@
+kubectl get replicasets
+ou
+kubectl get rs
+
+kubectl get replicaset -o wide
+kubectl set image deployment hello-kubernetes hello-kubernetes=FOO_BAR:TEST
+kubectl get replicaset -o wide
+kubectl get pods
+kubectl describe pod hello-kubernetes-66cbdfb555-hxvw2
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl set image deployment hello-kubernetes hello-kubernetes=leandrocgsi/hello-kubernetes:erudio-0.0.2
+
+https://hub.docker.com/layers/leandrocgsi/hello-kubernetes/erudio-0.0.2/images/sha256-64d8fb2a409d610ea258aee7423faddacc39e5df64cc27b9807a7b23037ba3ab?context=repo
+
+kubectl get pods
+kubectl get events --sort-by=.metadata/creationTimestamp

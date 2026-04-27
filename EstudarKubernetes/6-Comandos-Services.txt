@@ -1,0 +1,7 @@
+kubectl get pods -o wide
+kubectl delete pod hello-kubernetes-5df8fb76f9-6jp4l
+kubectl get pods -o wide
+
+kubectl expose deployment hello-kubernetes --type=LoadBalancer --port=8080 (esse comando criou o service de forma transparente pra nós)
+
+kubectl get services

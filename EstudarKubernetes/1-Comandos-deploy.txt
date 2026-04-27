@@ -1,0 +1,10 @@
+A docker image está disponível aqui https://hub.docker.com/repository/docker/leandrocgsi/hello-kubernetes/general
+E o código fonte dela (em diferentes linguagens) aqui https://github.com/leandrocgsi/hello-kubernetes
+
+kubectl version
+kubectl create deployment hello-kubernetes --image=leandrocgsi/hello-kubernetes:erudio-0.0.1
+kubectl expose deployment hello-kubernetes --type=LoadBalancer --port=8080
+
+https://hub.docker.com/layers/leandrocgsi/hello-kubernetes/erudio-0.0.1/images/sha256-125c8f779730cf3b58f4ae9c7d4dd5b8b5a08ca0855d5dcabd6ac3522f2a3251?context=repo
+
+Acesse http://localhost:8080/hello-kubernetes
