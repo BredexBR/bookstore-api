@@ -64,6 +64,20 @@ O Deployment gerencia os ReplicaSets e permite atualizações de versão sem dow
     ```bash
     kubectl set image deployment hello-kubernetes hello-kubernetes=leandrocgsi/hello-kubernetes:erudio-0.0.2
     ```
+
+* **Acompanhar status da atualização (Rollout):**
+    Útil para verificar em tempo real se a nova versão foi implantada com sucesso.
+
+    ```Bash
+    kubectl rollout status deployment hello-kubernetes
+    ```
+* **Gerenciar Variáveis de Ambiente:**
+    Define ou altera configurações do container sem precisar mudar a imagem Docker.
+
+    ```Bash
+    kubectl set env deployment/hello-kubernetes APP_COLOR=blue
+    ```
+
 * **Verificar alteração:**
     ```bash
     kubectl get replicaset -o wide
